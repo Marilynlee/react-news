@@ -1,5 +1,5 @@
 import React from "react";
-import {Card,Tooltip} from "antd";
+import {Card, List, Tooltip} from "antd";
 import {BrowserHistory, Link} from "react-router";
 
 export default class PCNewsTextBlock extends React.Component {
@@ -10,9 +10,8 @@ export default class PCNewsTextBlock extends React.Component {
         };
     }
 
-
-    componentWillMount() {
-        fetch(`http://newsapi.gugujiankong.com/Handler.ashx?action=getnews&type=${this.props.type}&count=${this.props.count}`,
+    getNewsList(type, count) {
+        fetch(`http://newsapi.gugujiankong.com/Handler.ashx?action=getnews&type=${type}&count=${count}`,
             {method: 'GET'})
             .then(response => response.json())
             .then(json => {
@@ -21,28 +20,51 @@ export default class PCNewsTextBlock extends React.Component {
             });
     }
 
-    render() {
 
+    componentWillMount() {
+        this.getNewsList(this.props.type, this.props.count);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.type !== this.props.type) {
+            this.getNewsList(nextProps.type, nextProps.count);
+        }
+    }
+
+    render() {
+        const itemType = this.props.type;
         const {news} = this.state;
         const newsList = news.length ?
-            news.map((item, index) =>
-                <li key={index}>
-                    <Link to={`details/${item.uniquekey}`} target="_blank" data-id={item.uniquekey}>
+            <List
+                dataSource={news}
+                itemLayout="vertical "
+                pagination={{
+                    onChange: (page) => {
+                        console.log(page);
+                    },
+                    pageSize: 20,
+                }}
+                renderItem={item => (
+                    <Link to={{
+                        pathname: `details/${item.uniquekey}`,
+                        state: `${itemType}`
+                    }}>
                         <Tooltip placement="bottomLeft" title={item.title}>
-                            {item.title}
+                            <List.Item>
+                                <p>{item.title}</p>
+                            </List.Item>
                         </Tooltip>
                     </Link>
-                </li>
-            )
+                )}
+            />
             :
             "客观稍等，暂时还没有新闻！";
 
         return (
+
             <div className="topNewsList">
                 <Card>
-                    <ul>
-                        {newsList}
-                    </ul>
+                    {newsList}
                 </Card>
             </div>
         )

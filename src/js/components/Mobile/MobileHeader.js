@@ -111,8 +111,10 @@ class MobileHeader extends React.Component {
         return (
             <div className="m-header">
                 <header>
-                    <img src="./src/imgs/logo.png" alt="logo"/>
-                    <span>React News</span>
+                    <a href="/">
+                        <img src="./src/imgs/logo.png" alt="logo"/>
+                        <span>React News</span>
+                    </a>
                     {userShow}
                 </header>
                 <Modal  destroyOnClose={true} title="用户中心" visible={this.state.modalShow} centered={true}

@@ -1,5 +1,5 @@
 import React from "react";
-import {Card,Tooltip} from "antd";
+import {Card, Tooltip} from "antd";
 import {BrowserHistory, Link} from "react-router";
 
 export default class PCNewsImgBlock extends React.Component {
@@ -16,31 +16,36 @@ export default class PCNewsImgBlock extends React.Component {
             {method: 'GET'})
             .then(response => response.json())
             .then(json => {
-                console.info(json);
+                // console.info(json);
                 this.setState({news: json});
             });
     }
 
     render() {
 
-        const styleImage={
-            display:"block",
+        const styleImage = {
+            display: "block",
             // width:this.props.imageWidth,
             // height:"90px",
-            width:"95%"
+            width: "95%"
 
         };
-        const styleH3={
+        const styleH3 = {
             // width:this.props.imageWidth,
-            whiteSpace:"nowrap",
-            overflow:"hidden",
-            textOverflow:"ellipsis"
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis"
         };
+        const itemType = this.props.type;
         const {news} = this.state;
         const newsList = news.length ?
             news.map((item, index) =>
-                <div key={index} className="imageblock" style={{width:this.props.imageWidth,verticalAlign:"top"}}>
-                    <Link to={`details/${item.uniquekey}`} target="_blank">
+                <div key={index} className="imageblock" style={{width: this.props.imageWidth, verticalAlign: "top"}}>
+                    {/*<Link to={`details/${item.uniquekey}`}  state={{type: itemType}} target="_blank">*/}
+                    <Link to={{
+                        pathname: `details/${item.uniquekey}`,
+                        state: `${itemType}`
+                    }} >
                         <div className="custom-image">
                             <img src={item.thumbnail_pic_s} alt="news picture" style={styleImage}/>
                         </div>
@@ -58,7 +63,7 @@ export default class PCNewsImgBlock extends React.Component {
 
         return (
             <div className="topNewsList">
-                <Card title={this.props.cartTitle} bordered={true} style={{width:this.props.width}}>
+                <Card title={this.props.cartTitle} bordered={true} style={{width: this.props.width}}>
                     {newsList}
                 </Card>
             </div>

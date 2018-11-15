@@ -3,7 +3,6 @@
  */
 import React from "react";
 import {Button, Col, Form, Icon, Input, Menu, message, Modal, Row, Tabs} from "antd";
-import {Link} from "react-router";
 import "whatwg-fetch";
 
 
@@ -12,10 +11,10 @@ const TabPane = Tabs.TabPane;
 const ButtonGroup = Button.Group;
 
 class PCHeader extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
-            current: 'hot',
+            // current: this.props.type,
             modalShow: false,
             action: 'login',
             hasLogin: false,
@@ -24,12 +23,11 @@ class PCHeader extends React.Component {
         };
     }
 
-    handleClick(e) {
-        if(e.key==='register'){
-            this.setState({modalShow:true})
+    componentWillReceiveProps(nextProps){
+        if (nextProps.modalShow !== this.props.modalShow) {
+            this.setState({modalShow: nextProps.modalShow});
         }
-        this.setState({current: e.key});
-    };
+    }
 
     handleModalShow(boolean) {
         this.setState({
@@ -140,16 +138,16 @@ class PCHeader extends React.Component {
                             <span>React News</span>
                         </a>
                     </Col>
-                    <Col offset={2} span={16}>
-                        <Menu mode="horizontal" selectedKeys={[this.state.current]} onClick={this.handleClick.bind(this)}>
-                            <Menu.Item key="hot"><Icon type="rocket" theme="outlined"/>头条</Menu.Item>
-                            <Menu.Item key="sociology"><Icon type="codepen-circle" theme="outlined"/>社会</Menu.Item>
-                            <Menu.Item key="home"><Icon type="dribbble" theme="outlined"/>国内</Menu.Item>
-                            <Menu.Item key="international"><Icon type="global" theme="outlined"/>国际</Menu.Item>
-                            <Menu.Item key="fun"><Icon type="message" theme="outlined"/>娱乐</Menu.Item>
-                            <Menu.Item key="sport"><Icon type="notification" theme="outlined"/>体育</Menu.Item>
-                            <Menu.Item key="tech"><Icon type="rocket" theme="outlined"/>科技</Menu.Item>
-                            <Menu.Item key="fashion"><Icon type="skin" theme="outlined"/>时尚</Menu.Item>
+                    <Col span={16}>
+                        <Menu mode="horizontal" selectedKeys={[this.props.type]} onClick={this.props.changeNewsType}>
+                            <Menu.Item key="top"><Icon type="rocket" theme="outlined"/>头条</Menu.Item>
+                            <Menu.Item key="shehui"><Icon type="codepen-circle" theme="outlined"/>社会</Menu.Item>
+                            <Menu.Item key="guonei"><Icon type="dribbble" theme="outlined"/>国内</Menu.Item>
+                            <Menu.Item key="guoji"><Icon type="global" theme="outlined"/>国际</Menu.Item>
+                            <Menu.Item key="yule"><Icon type="message" theme="outlined"/>娱乐</Menu.Item>
+                            <Menu.Item key="tiyu"><Icon type="notification" theme="outlined"/>体育</Menu.Item>
+                            <Menu.Item key="keji"><Icon type="rocket" theme="outlined"/>科技</Menu.Item>
+                            <Menu.Item key="shishang"><Icon type="skin" theme="outlined"/>时尚</Menu.Item>
                             {userShow}
                         </Menu>
                     </Col>

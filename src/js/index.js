@@ -8,6 +8,7 @@ import PCIndex from './components/PC/PCIndex';
 import PCNewsDetails from './components/PC/PCNewsDetails';
 
 import MobileIndex from './components/Mobile/MobileIndex';
+import MobileNewsDetails from './components/Mobile/MobileNewsDetails';
 
 import '../css/pc.css';
 import '../css/mobile.css';
@@ -27,7 +28,10 @@ class Root extends React.Component {
                     </Router>
                 </MediaQuery>
                 <MediaQuery maxDeviceWidth={1224}>
-                    <MobileIndex/>
+                    <Router history={hashHistory}>
+                        <Route path="/" component={MobileIndex}/>
+                        <Route path="details/:uniquekey" component={MobileNewsDetails}/>
+                    </Router>
                 </MediaQuery>
             </div>
         )

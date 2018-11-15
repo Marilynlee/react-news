@@ -1,10 +1,9 @@
 import React from "react";
-import {Col, Row, BackTop} from "antd";
-import PCHeader from "./PCHeader";
-import PCFooter from "./PCFooter";
-import PCNewsImgBlock from "./PCNewsImgBlock";
+import {BackTop, Col, Row} from "antd";
+import MobileHeader from "./MobileHeader";
+import MobileFooter from "./MobileFooter";
 
-export default class PCNewsDetails extends React.Component {
+export default class MobileNewsDetails extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -12,7 +11,7 @@ export default class PCNewsDetails extends React.Component {
         };
     }
 
-    getNewsItemDetail(uniquekey){
+    getNewsItemDetail(uniquekey) {
         fetch(`http://newsapi.gugujiankong.com/Handler.ashx?action=getnewsitem&uniquekey=${uniquekey}`,
             {method: 'GET'})
             .then(response => response.json())
@@ -27,7 +26,7 @@ export default class PCNewsDetails extends React.Component {
         this.getNewsItemDetail(this.props.params.uniquekey);
     }
 
-    componentWillReceiveProps(nextProps){
+    componentWillReceiveProps(nextProps) {
         if (nextProps.params.uniquekey !== this.props.params.uniquekey) {
             let uniquekey = nextProps.params.uniquekey;
             this.getNewsItemDetail(uniquekey);
@@ -35,23 +34,22 @@ export default class PCNewsDetails extends React.Component {
     }
 
     createMarkup() {
-        let newsItem = this.state.newsItem?this.state.newsItem.pagecontent:"";
+        let newsItem = this.state.newsItem ? this.state.newsItem.pagecontent : "";
         return {__html: newsItem}
     }
 
     render() {
         return (
-            <div>
-                <PCHeader/>
-                <Row>
-                    <Col offset={2} span={14} className="container">
-                        <div className="articleContainer" dangerouslySetInnerHTML={this.createMarkup()}></div>
-                    </Col>
-                    <Col span={6}>
-                        <PCNewsImgBlock count={20} type={this.props.location.state} cartTitle="相关新闻" width="100%" imageWidth="50%" />
-                    </Col>
-                </Row>
-                <PCFooter/>
+            <div id="mobileDetailsContainer">
+                <MobileHeader/>
+                <div className="ucmobileList">
+                    <Row>
+                        <Col span={24} className="container">
+                            <div className="articleContainer" dangerouslySetInnerHTML={this.createMarkup()}></div>
+                        </Col>
+                    </Row>
+                </div>
+                <MobileFooter/>
                 <BackTop />
             </div>
         )

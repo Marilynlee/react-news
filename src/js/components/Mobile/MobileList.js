@@ -27,7 +27,7 @@ export default class PCNewsTextBlock extends React.Component {
         const newsList = news.length ?
             news.map((item, index) =>
                 <section key={index} className="m_article list-item special_section clearfix">
-                    <Link to={`details/${item.uniqueKey}`}>
+                    <Link to={`details/${item.uniquekey}`}>
                         <div className="m_article_img">
                             <img src={item.thumbnail_pic_s} alt={item.title}/>
                         </div>

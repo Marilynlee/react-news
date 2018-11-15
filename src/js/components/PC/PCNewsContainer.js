@@ -8,6 +8,12 @@ const { Meta } = Card;
 
 
 export default class PCNewsContainer extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state={
+            // type:this.props.type
+        }
+    }
 
     render() {
 
@@ -34,20 +40,7 @@ export default class PCNewsContainer extends React.Component {
                                 <PCNewsImgBlock count={6} type="yule" width="100%" cartTitle="娱乐头条" imageWidth="33%"/>
                             </Col>
                             <Col span={10}>
-                                <Tabs className="tabs_news">
-                                    <TabPane tab="头条" key="1">
-                                        <PCNewsTextBlock count={20} type="top"/>
-                                    </TabPane>
-                                    <TabPane tab="社会" key="2">
-                                        <PCNewsTextBlock count={20} type="shehui"/>
-                                    </TabPane>
-                                    <TabPane tab="国内" key="3">
-                                        <PCNewsTextBlock count={20} type="guonei"/>
-                                    </TabPane>
-                                    <TabPane tab="国际" key="4">
-                                        <PCNewsTextBlock count={20} type="guoji"/>
-                                    </TabPane>
-                                </Tabs>
+                                <PCNewsTextBlock count={20} type={this.props.type}/>
                             </Col>
                             <Col span={4}>
                                 <Card hoverable style={{ width: "100%" }} cover={<img alt="example" src="./src/imgs/carousel_1.jpg"/>}>
@@ -64,8 +57,7 @@ export default class PCNewsContainer extends React.Component {
                         <Row>
                             <Col span={24}>
                                 <PCNewsImgBlock count={10} type="keji" width="100%" cartTitle="科技头条" imageWidth="10%"/>
-                                <PCNewsImgBlock count={10} type="shishang" width="100%" cartTitle="时尚头条"
-                                                imageWidth="10%"/>
+                                <PCNewsImgBlock count={10} type="shishang" width="100%" cartTitle="时尚头条" imageWidth="10%"/>
                                 <PCNewsImgBlock count={10} type="tiyu" width="100%" cartTitle="体育头条" imageWidth="10%"/>
                             </Col>
                         </Row>
