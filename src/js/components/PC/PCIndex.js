@@ -10,7 +10,7 @@ export default class PCIndex extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            type: 'top',
+            type: this.props.location.state?this.props.location.state:'top',
             modalShow:false
         };
     }
