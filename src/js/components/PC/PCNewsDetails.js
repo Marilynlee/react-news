@@ -58,7 +58,7 @@ export default class PCNewsDetails extends React.Component {
     render() {
         return (
             <div>
-                <PCHeader modalShow={this.state.modalShow} type={this.state.type}
+                <PCHeader modalShowProps={this.state.modalShow} type={this.state.type}
                           changeNewsType={this.changeNewsType.bind(this)}/>
                 <Row>
                     <Col offset={2} span={14} className="container">

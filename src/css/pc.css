@@ -1,34 +1,36 @@
-.logo{
+.logo {
     align-items: center;
     display: flex;
 }
 
-.logo img{
+.logo img {
     width: 48px;
     height: 48px;
 }
 
-.logo span{
+.logo span {
     font-size: 24px;
     padding-left: 5px;
 }
 
-.container{
+.container {
     padding: 10px;
 }
 
-.ant-card{
+.ant-card {
     margin-top: 5px !important;
 }
 
-.ant-card-head-title{
+.ant-card-head-title {
     text-align: left !important;
 }
-.ant-card-body{
+
+.ant-card-body {
     text-align: left !important;
 }
-.usercenter {
-    /*float: right !important;*/
+
+.registerBox .ant-form-item:first-child, .loginBox .ant-form-item:first-child{
+    margin-top: 24px;
 }
 
 #container {
@@ -36,44 +38,37 @@
 }
 
 .container {
-    /*text-align: center;*/
     margin-top: 5px;
-}
-
-.carousel {
-    /*width: 400px;*/
-    /*float: left;*/
 }
 
 .carousel img {
     width: 100%;
-    /*height: 260px;*/
 }
 
 .topNewsList {
-    /*float: left;*/
     text-align: left;
     font-size: 14px;
     margin-bottom: 10px;
 }
 
 .topNewsList a {
-    /*line-height: 22px !important;*/
     color: #666 !important;
 }
-.topNewsList .ant-list-item{
-    padding:0;
+
+.topNewsList .ant-list-item {
+    padding: 0;
 }
-.topNewsList .ant-list-item-content{
-    width:0;
+
+.topNewsList .ant-list-item-content {
+    width: 0;
 }
-.topNewsList .ant-list-item-content p{
+
+.topNewsList .ant-list-item-content p {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     margin: 5px 0;
 }
-
 
 .ant-tabs-bar {
     margin-bottom: 0 !important;
@@ -83,10 +78,8 @@
     padding: 15px !important;
 }
 
-
 /*image block******START*****/
 .imageblock {
-    /*float: left;*/
     display: inline-block;
 }
 
@@ -98,12 +91,8 @@
     color: #999;
 }
 
-.register{
-    /*float: right !important;*/
-}
 
 /*image block******END*****/
-
 iframe {
     position: relative !important;
     overflow-y: hidden !important;
@@ -114,11 +103,9 @@ iframe {
     font-size: 12px !important;
 }
 
-.ant-menu-horizontal > .ant-menu-item > a, .ant-menu-horizontal > .ant-menu-submenu > a
-{
+.ant-menu-horizontal > .ant-menu-item > a, .ant-menu-horizontal > .ant-menu-submenu > a {
     display: inline-block !important;
 }
-
 
 /*Footer******Start*****/
 
@@ -127,9 +114,8 @@ iframe {
     padding-top: 20px;
 }
 
-
 /*Footer******End*****/
-.title,.article-title .title {
+.title, .article-title .title {
     font-size: 0.44rem !important;
     line-height: 1.4em
 }
@@ -141,3 +127,27 @@ iframe {
 .article-content .txt {
     font-size: 0.36rem !important;
 }
+
+/*  comments **** start ***/
+.comment .ant-list-item {
+    display: block;
+    position: relative;
+}
+
+.comment .ant-list-item-meta .ant-list-item-meta-description {
+    font-size: 10px;
+}
+
+.comment .ant-list-item-content {
+    justify-content: flex-start;
+}
+
+.comment .ant-list-item .ant-list-item-action {
+    margin-left: 0;
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-top: 8px;
+}
+
+/*  comments **** end ***/

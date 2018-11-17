@@ -1,7 +1,9 @@
 import React from "react";
-import {BackTop, Col, Row} from "antd";
+import {BackTop, Col, Row, Divider} from "antd";
 import MobileHeader from "./MobileHeader";
 import MobileFooter from "./MobileFooter";
+import Comments from "../common/Comments";
+
 
 export default class MobileNewsDetails extends React.Component {
     constructor(props) {
@@ -46,6 +48,8 @@ export default class MobileNewsDetails extends React.Component {
                     <Row>
                         <Col span={24} className="container">
                             <div className="articleContainer" dangerouslySetInnerHTML={this.createMarkup()}></div>
+                            <Divider/>
+                            <Comments uniquekey={this.props.params.uniquekey}/>
                         </Col>
                     </Row>
                 </div>

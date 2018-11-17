@@ -99,7 +99,9 @@ class MobileHeader extends React.Component {
 
         const userShow = this.state.hasLogin
             ?
-            <Icon type="user" theme="outlined" onClick={this.loginOut.bind(this)} />
+            <Link to="/usercenter">
+                <Icon type="mail" theme="outlined" onClick={this.loginOut.bind(this)} />
+            </Link>
             :
             <Icon type="lock" theme="outlined" onClick={this.handleModalShow.bind(this,true)} />;
         const {getFieldDecorator} = this.props.form;

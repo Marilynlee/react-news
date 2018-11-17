@@ -3,29 +3,115 @@
  */
 import React from "react";
 import {Button, Col, Form, Icon, Input, Menu, message, Modal, Row, Tabs} from "antd";
-import "whatwg-fetch";
+import {Link} from "react-router";
 
 
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
 const ButtonGroup = Button.Group;
 
+
+const LoginAndRegisterForm = Form.create()(
+    class extends React.Component {
+        render() {
+            const {modalShow, handleModalShow, changeTab, handleSubmit, form} = this.props;
+            const {getFieldDecorator} = form;
+            const formItemLayout = {
+                labelCol: {span: 6},
+                wrapperCol: {span: 14},
+            };
+
+            return (
+                <Modal destroyOnClose={true} title="用户中心" visible={modalShow} centered={true}
+                       okText="关闭" onCancel={() => handleModalShow(false)} footer={null}>
+                    <Tabs type="line" onChange={changeTab}>
+                        <TabPane tab="登录" key="loginTab">
+                            <Form onSubmit={handleSubmit} className="loginBox">
+                                <FormItem {...formItemLayout} label="账户">
+                                    {getFieldDecorator('userNameLogin', {
+                                        rules: [{required: true, message: '请输入账户!'}],
+                                    })(
+                                        <Input prefix={<Icon type="user" style={{color: 'rgba(0,0,0,.25)'}}/>}
+                                               placeholder="账户"/>
+                                    )}
+                                </FormItem>
+                                <FormItem {...formItemLayout} label="密码">
+                                    {getFieldDecorator('passwordLogin', {
+                                        rules: [{required: true, message: '请输入密码!'}],
+                                    })(
+                                        <Input prefix={<Icon type="lock" style={{color: 'rgba(0,0,0,.25)'}}/>}
+                                               type="password"
+                                               placeholder="密码"/>
+                                    )}
+                                </FormItem>
+                                <FormItem wrapperCol={{span: 12, offset: 6}}>
+                                    <Button type="primary" htmlType="submit" className="login-form-button">登录</Button>
+                                </FormItem>
+                            </Form>
+                        </TabPane>
+                        <TabPane tab="注册" key="registerTab">
+                            <Form onSubmit={handleSubmit} className="registerBox">
+                                <FormItem {...formItemLayout} label="用户名">
+                                    {getFieldDecorator('userName', {
+                                        rules: [{required: true, message: '请输入用户名!'}],
+                                    })(
+                                        <Input prefix={<Icon type="user" style={{color: 'rgba(0,0,0,.25)'}}/>}
+                                               placeholder="用户名"/>
+                                    )}
+                                </FormItem>
+                                <FormItem {...formItemLayout} label="密码">
+                                    {getFieldDecorator('password', {
+                                        rules: [{required: true, message: '请输入密码!'}],
+                                    })(
+                                        <Input prefix={<Icon type="lock" style={{color: 'rgba(0,0,0,.25)'}}/>}
+                                               type="password"
+                                               placeholder="密码"/>
+                                    )}
+                                </FormItem>
+                                <FormItem {...formItemLayout} label="确认密码">
+                                    {getFieldDecorator('confirmPassword', {
+                                        rules: [{required: true, message: '请确认密码!'}],
+                                    })(
+                                        <Input prefix={<Icon type="lock" style={{color: 'rgba(0,0,0,.25)'}}/>}
+                                               type="password"
+                                               placeholder="确认密码"/>
+                                    )}
+                                </FormItem>
+                                <FormItem wrapperCol={{span: 12, offset: 6}}>
+                                    <Button type="primary" htmlType="submit" className="login-form-button">注册</Button>
+                                </FormItem>
+                            </Form>
+                        </TabPane>
+                    </Tabs>
+                </Modal>
+            );
+        }
+    }
+);
+
+
 class PCHeader extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            // current: this.props.type,
-            modalShow: false,
+            modalShow: this.props.modalShowProps,
             action: 'login',
             hasLogin: false,
             userNickName: "",
             userId: "",
         };
+        this.handleModalShow = this.handleModalShow.bind(this);
+        this.changeTab = this.changeTab.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.saveFormRef = this.saveFormRef.bind(this);
     }
 
-    componentWillReceiveProps(nextProps){
-        if (nextProps.modalShow !== this.props.modalShow) {
-            this.setState({modalShow: nextProps.modalShow});
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.modalShowProps !== this.props.modalShowProps) {
+            this.setState({modalShow: nextProps.modalShowProps});
+        }
+        if (nextProps.modalShowProps && !this.state.modalShow) {
+            this.setState({modalShow: true});
         }
     }
 
@@ -35,74 +121,79 @@ class PCHeader extends React.Component {
         });
     };
 
-    changeTab(key){
-        if(key==="loginTab"){
+    changeTab(key) {
+        if (key === "loginTab") {
             this.setState({action: 'login'});
-        }else{
+        } else {
             this.setState({action: 'register'});
         }
-    }
+    };
 
-    loginOut(e){
+    loginOut(e) {
         e.preventDefault();
         e.stopPropagation();
-        localStorage.userid= '';
+        localStorage.userid = '';
         localStorage.userNickName = '';
-        this.setState({hasLogin:false,userId:"",userNickName:""});
-    }
+        this.setState({hasLogin: false, userId: "", userNickName: ""});
+    };
 
-    handleSubmit(e){
+    handleSubmit(e) {
         e.preventDefault();
         e.stopPropagation();
-        console.log(e);
-        if(this.state.action==="login"){
-            this.props.form.validateFields(["userNameLogin","passwordLogin"],(err, values) => {
+        const form = this.formRef.props.form;
+        if (this.state.action === "login") {
+            form.validateFields(["userNameLogin", "passwordLogin"], (err, values) => {
                 if (!err) {
                     console.log(values);
                     fetch(`http://newsapi.gugujiankong.com/Handler.ashx?action=login&r_username=${values.userName}&r_password=${values.password}`,
                         {method: 'GET'})
                         .then(response => response.json())
                         .then(json => {
-                            localStorage.userId= json.UserId;
-                            localStorage.userNickName = json.NickUserName;
-                            this.setState({hasLogin:true,userNickName: json.NickUserName?json.NickUserName:"Lyn",userId: json.UserId,modalShow:false});
-                            message.success("请求成功！",5);
+                            localStorage.userId = json.UserId;
+                            localStorage.userNickName = json.NickUserName? json.NickUserName : "Lyn";
+                            this.setState({
+                                hasLogin: true,
+                                userNickName: json.NickUserName ? json.NickUserName : "Lyn",
+                                userId: json.UserId,
+                                modalShow: false
+                            });
+                            message.success("登录成功！", 5);
+                            form.resetFields();
                         });
 
-                }else{
+                } else {
                     message.error("请输入有效信息!");
                 }
             });
-        }else if(this.state.action==="register"){
-            this.props.form.validateFields(["userName","password","confirmPassword"],(err, values) => {
+        } else if (this.state.action === "register") {
+            form.validateFields(["userName", "password", "confirmPassword"], (err, values) => {
                 if (!err) {
                     console.log(values);
                     fetch(`http://newsapi.gugujiankong.com/Handler.ashx?action=${this.state.action}&r_username=${values.userName}&r_password=${values.password}&r_confirmPassword=${values.confirmPassword}`,
                         {method: 'GET'})
                         .then(response => response.json())
                         .then(json => {
-                            this.setState({userNickName: json.NickUserName?json.NickUserName:"Lyn", userId: json.UserId,modalShow:false});
-                            localStorage.userId= json.UserId;
-                            localStorage.userNickName = json.NickUserName;
-                            message.success("请求成功！",5);
+                            this.setState({
+                                userNickName: json.NickUserName ? json.NickUserName : "Lyn",
+                                userId: json.UserId,
+                                modalShow: false
+                            });
+                            localStorage.userId = json.UserId;
+                            localStorage.userNickName = json.NickUserName? json.NickUserName : "Lyn";
+                            message.success("注册成功！", 5);
+                            form.resetFields();
                         });
 
-                }else{
+                } else {
                     message.error("请输入有效信息!");
                 }
             });
         }
-    }
-    componentWillMount(){
-        console.log("will mount");
-    }
-    componentDidMount(){
-        console.log("did mount");
-    }
-    componentDidUpdate(){
-        console.log("did update");
-    }
+    };
 
+    saveFormRef(formRef) {
+        this.formRef = formRef;
+    };
 
     render() {
         const userShow = this.state.hasLogin
@@ -111,24 +202,18 @@ class PCHeader extends React.Component {
                 <ButtonGroup>
                     <Button type="primary" htmlType="button">{this.state.userNickName}</Button>
                     &nbsp;&nbsp;
-                    {/*<Link>*/}
+                    <Link to="/usercenter">
                         <Button type='dashed' htmlType="button">个人中心</Button>
-                    {/*</Link>*/}
+                    </Link>
                     &nbsp;&nbsp;
-                    {/*<Link>*/}
-                        <Button type="ghost" htmlType="button" onClick={this.loginOut.bind(this)}>退出</Button>
-                    {/*</Link>*/}
+                    <Button type="ghost" htmlType="button" onClick={this.loginOut.bind(this)}>退出</Button>
                 </ButtonGroup>
             </Menu.Item>
             :
             <Menu.Item key="register">
                 <Icon type="unlock" theme="outlined"/>注册/登录
             </Menu.Item>;
-        const {getFieldDecorator} = this.props.form;
-        const formItemLayout = {
-            labelCol: { span: 6 },
-            wrapperCol: { span: 14 },
-        };
+
         return (
             <header>
                 <Row>
@@ -151,69 +236,17 @@ class PCHeader extends React.Component {
                             {userShow}
                         </Menu>
                     </Col>
-                    <Modal destroyOnClose={true} title="用户中心" visible={this.state.modalShow} centered={true}
-                           okText="关闭"  onCancel={this.handleModalShow.bind(this, false)} footer={null}>
-                        <Tabs type="line"  onChange={this.changeTab.bind(this)}>
-                            <TabPane tab="登录" key="loginTab">
-                                <Form onSubmit={this.handleSubmit.bind(this)}>
-                                    <FormItem {...formItemLayout} label="账户">
-                                        {getFieldDecorator('userNameLogin', {
-                                            rules: [{required: true, message: '请输入账户!'}],
-                                        })(
-                                            <Input prefix={<Icon type="user" style={{color: 'rgba(0,0,0,.25)'}}/>}
-                                                   placeholder="账户"/>
-                                        )}
-                                    </FormItem>
-                                    <FormItem {...formItemLayout} label="密码">
-                                        {getFieldDecorator('passwordLogin', {
-                                            rules: [{required: true, message: '请输入密码!'}],
-                                        })(
-                                            <Input prefix={<Icon type="lock" style={{color: 'rgba(0,0,0,.25)'}}/>} type="password"
-                                                   placeholder="密码"/>
-                                        )}
-                                    </FormItem>
-                                    <FormItem wrapperCol={{ span: 12, offset: 6 }}>
-                                        <Button type="primary" htmlType="submit" className="login-form-button">登录</Button>
-                                    </FormItem>
-                                </Form>
-                            </TabPane>
-                            <TabPane tab="注册" key="registerTab">
-                                <Form onSubmit={this.handleSubmit.bind(this)} className="login-form">
-                                    <FormItem {...formItemLayout} label="用户名">
-                                        {getFieldDecorator('userName', {
-                                            rules: [{required: true, message: '请输入用户名!'}],
-                                        })(
-                                            <Input prefix={<Icon type="user" style={{color: 'rgba(0,0,0,.25)'}}/>}
-                                                   placeholder="用户名"/>
-                                        )}
-                                    </FormItem>
-                                    <FormItem {...formItemLayout} label="密码">
-                                        {getFieldDecorator('password', {
-                                            rules: [{required: true, message: '请输入密码!'}],
-                                        })(
-                                            <Input prefix={<Icon type="lock" style={{color: 'rgba(0,0,0,.25)'}}/>} type="password"
-                                                   placeholder="密码"/>
-                                        )}
-                                    </FormItem>
-                                    <FormItem {...formItemLayout} label="确认密码">
-                                        {getFieldDecorator('confirmPassword', {
-                                            rules: [{required: true, message: '请确认密码!'}],
-                                        })(
-                                            <Input prefix={<Icon type="lock" style={{color: 'rgba(0,0,0,.25)'}}/>} type="password"
-                                                   placeholder="确认密码"/>
-                                        )}
-                                    </FormItem>
-                                    <FormItem wrapperCol={{ span: 12, offset: 6 }}>
-                                        <Button type="primary" htmlType="submit" className="login-form-button">注册</Button>
-                                    </FormItem>
-                                </Form>
-                            </TabPane>
-                        </Tabs>
-                    </Modal>
+                    <LoginAndRegisterForm
+                        wrappedComponentRef={this.saveFormRef}
+                        modalShow={this.state.modalShow}
+                        changeTab={this.changeTab}
+                        handleModalShow={this.handleModalShow}
+                        handleSubmit={this.handleSubmit}
+                    />
                 </Row>
             </header>
         )
     }
 }
 
-export default PCHeader = Form.create()(PCHeader);
+export default PCHeader;

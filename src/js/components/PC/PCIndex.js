@@ -27,7 +27,7 @@ export default class PCIndex extends React.Component {
     render() {
         return (
             <div>
-                <PCHeader modalShow={this.state.modalShow} type={this.state.type} changeNewsType={this.changeNewsType.bind(this)}/>
+                <PCHeader modalShowProps={this.state.modalShow} type={this.state.type} changeNewsType={this.changeNewsType.bind(this)}/>
                 <PCNewsContainer type={this.state.type}/>
                 <PCFooter/>
             </div>

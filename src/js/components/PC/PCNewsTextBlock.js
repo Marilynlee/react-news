@@ -40,9 +40,9 @@ export default class PCNewsTextBlock extends React.Component {
                 itemLayout="vertical "
                 pagination={{
                     onChange: (page) => {
-                        console.log(page);
+                        this.getNewsList(this.props.type, this.props.count*page);
                     },
-                    pageSize: 20,
+                    pageSize: 16,
                 }}
                 renderItem={item => (
                     <Link to={{

@@ -1,20 +1,22 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import MediaQuery from 'react-responsive';
-import {Router, Route, hashHistory,BrowserHistory, Link} from "react-router";
+import MediaQuery from "react-responsive";
+import {BrowserHistory, hashHistory, Route, Router} from "react-router";
 
 
-import PCIndex from './components/PC/PCIndex';
-import PCNewsDetails from './components/PC/PCNewsDetails';
+import PCIndex from "./components/PC/PCIndex";
+import PCNewsDetails from "./components/PC/PCNewsDetails";
+import PCUserCenter from "./components/PC/PCUserCenter";
 
-import MobileIndex from './components/Mobile/MobileIndex';
-import MobileNewsDetails from './components/Mobile/MobileNewsDetails';
+import MobileIndex from "./components/Mobile/MobileIndex";
+import MobileNewsDetails from "./components/Mobile/MobileNewsDetails";
+import MobileUserCenter from "./components/Mobile/MobileUserCenter";
 
-import '../css/pc.css';
-import '../css/mobile.css';
+import "../css/pc.css";
+import "../css/mobile.css";
 
 class Root extends React.Component {
-    constructor(){
+    constructor() {
         super();
     }
 
@@ -25,12 +27,14 @@ class Root extends React.Component {
                     <Router history={hashHistory}>
                         <Route path="/" component={PCIndex}/>
                         <Route path="details/:uniquekey" component={PCNewsDetails}/>
+                        <Route path="usercenter" component={PCUserCenter}/>
                     </Router>
                 </MediaQuery>
                 <MediaQuery maxDeviceWidth={1224}>
                     <Router history={hashHistory}>
                         <Route path="/" component={MobileIndex}/>
                         <Route path="details/:uniquekey" component={MobileNewsDetails}/>
+                        <Route path="usercenter" component={MobileUserCenter}/>
                     </Router>
                 </MediaQuery>
             </div>
