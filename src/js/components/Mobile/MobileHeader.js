@@ -29,6 +29,16 @@ class MobileHeader extends React.Component {
         };
     }
 
+    componentWillMount(){
+        if(localStorage.userId && localStorage.userId !== ""){
+            this.setState({
+                hasLogin:true,
+                userId:localStorage.userId,
+                userNickName:localStorage.userNickName,
+            });
+        }
+    }
+
     changeTab(key){
         if(key==="loginTab"){
             this.setState({action: 'login'});
