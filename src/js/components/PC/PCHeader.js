@@ -106,6 +106,16 @@ class PCHeader extends React.Component {
         this.saveFormRef = this.saveFormRef.bind(this);
     }
 
+    componentWillMount(){
+        if(localStorage.userId && localStorage.userId !== ""){
+            this.setState({
+                hasLogin:true,
+                userId:localStorage.userId,
+                userNickName:localStorage.userNickName,
+            });
+        }
+    }
+
     componentWillReceiveProps(nextProps) {
         if (nextProps.modalShowProps !== this.props.modalShowProps) {
             this.setState({modalShow: nextProps.modalShowProps});
@@ -132,7 +142,7 @@ class PCHeader extends React.Component {
     loginOut(e) {
         e.preventDefault();
         e.stopPropagation();
-        localStorage.userid = '';
+        localStorage.userId = '';
         localStorage.userNickName = '';
         this.setState({hasLogin: false, userId: "", userNickName: ""});
     };

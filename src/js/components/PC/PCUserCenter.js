@@ -1,10 +1,12 @@
 import React from "react";
-import {Col, Form, Icon, List, message, Row, Tabs, Upload} from "antd";
+import {Col, Icon, List, message, Row, Tabs, Upload} from "antd";
 import PCHeader from "./PCHeader";
 import PCFooter from "./PCFooter";
+import {Link} from "react-router";
+import "whatwg-fetch";
+
 
 const TabPane = Tabs.TabPane;
-const FormItem = Form.Item;
 
 function getBase64(img, callback) {
     const reader = new FileReader();
@@ -60,17 +62,15 @@ class PCUserCenter extends React.Component {
     }
 
     componentDidMount() {
-        let myFetchOptions = {
-            method: 'GET'
-        };
-
-        fetch("http://newsapi.gugujiankong.com/Handler.ashx?action=getuc&userid=" + localStorage.userid, myFetchOptions)
+        fetch("http://newsapi.gugujiankong.com/Handler.ashx?action=getuc&userid=" + localStorage.userId,
+            {method: 'GET'})
             .then(response => response.json())
             .then(json => {
                 this.setState({userCollection: json});
             });
 
-        fetch("http://newsapi.gugujiankong.com/Handler.ashx?action=getuserComments&userid=" + localStorage.userid, myFetchOptions)
+        fetch("http://newsapi.gugujiankong.com/Handler.ashx?action=getcomments&userid=" + localStorage.userId,
+            {method: 'GET'})
             .then(response => response.json())
             .then(json => {
                 this.setState({userComments: json});
@@ -89,12 +89,6 @@ class PCUserCenter extends React.Component {
         const imageUrl = this.state.imageUrl;
         const {userCollection, userComments} = this.state;
         const userCollectionList = userCollection.length ?
-            // usercollection.map((uc,index)=>(
-            //     <Card key={index} title={uc.uniquekey} extra={<a target="_blank" href={`/#/details/${uc.uniquekey}`}>查看</a>}>
-            //         <p>{uc.Title}</p>
-            //     </Card>
-            // ))
-
             <List size="small" dataSource={userCollection}  bordered
                   pagination={{
                       onChange: (page) => {
@@ -103,26 +97,29 @@ class PCUserCenter extends React.Component {
                       pageSize: 10,
                   }}
                   renderItem={item => (
-                      <List.Item key={item.uniquekey}
-                          actions={[<IconText type="star-o" text="156"/>, <IconText type="like-o" text="156"/>,
-                              <IconText type="message" text="2"/>]}
-                      >
+                      <List.Item key={item.uniquekey} actions={[<Link to={`details/${item.uniquekey}`}>查看</Link>]}>
                           {item.Title}
                       </List.Item>
-
                   )}
             />
-
             :
             '您还没有收藏任何的新闻，快去收藏一些新闻吧。';
 
         const userCommentsList = userComments.length ?
-            usercomments.map((comment, index) => (
-                <Card key={index} title={`于 ${comment.datetime} 评论了文章 ${comment.uniquekey}`}
-                      extra={<a target="_blank" href={`/#/details/${comment.uniquekey}`}>查看</a>}>
-                    <p>{comment.Comments}</p>
-                </Card>
-            ))
+            <List size="small" dataSource={userComments}  bordered
+                  pagination={{
+                      onChange: (page) => {
+                          console.log(page);
+                      },
+                      pageSize: 10,
+                  }}
+                  renderItem={item => (
+                      <List.Item key={item.Id.Pid} actions={[<Link to={`details/${item.uniquekey}`}>查看</Link>]}>
+                          <List.Item.Meta description={<div>于{item.datetime}评论了{item.uniquekey}文章</div>}/>
+                          {item.Comments}
+                      </List.Item>
+                  )}
+            />
             :
             '您还没有发表过任何评论。';
 
@@ -134,10 +131,22 @@ class PCUserCenter extends React.Component {
                     <Col offset={2} span={20}>
                         <Tabs>
                             <TabPane tab="收藏列表" key="1">
-                                <div>123</div>
+                                <div className="comment">
+                                    <Row>
+                                        <Col span={24}>
+                                            {userCollectionList}
+                                        </Col>
+                                    </Row>
+                                </div>
                             </TabPane>
                             <TabPane tab="评论列表" key="2">
-                                <div>456</div>
+                                <div className="comment">
+                                    <Row>
+                                        <Col span={24}>
+                                            {userCommentsList}
+                                        </Col>
+                                    </Row>
+                                </div>
                             </TabPane>
                             <TabPane tab="头像设置" key="3">
                                 <Upload

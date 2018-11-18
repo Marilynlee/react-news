@@ -22,7 +22,7 @@ class Comments extends React.Component {
                 fetch(`http://newsapi.gugujiankong.com/Handler.ashx?action=comment&userid=${localStorage.userId}&uniquekey=${this.props.uniquekey}&comment=${values.comment}`,
                     {method: 'GET'})
                     .then(response => response.json())
-                    .then(json => {
+                    .then(() => {
                         this.componentDidMount();
                         this.props.form.resetFields(["comment"], "")
                     });
@@ -35,7 +35,7 @@ class Comments extends React.Component {
         fetch(`http://newsapi.gugujiankong.com/Handler.ashx?action=uc&userid=${localStorage.userId}&uniquekey=${this.props.uniquekey}`,
             {method: 'GET'})
             .then(response => response.json())
-            .then(json => {
+            .then(() => {
                 notification.success({
                     message: "React News提醒",
                     description: "收藏文章成功！"
@@ -66,16 +66,17 @@ class Comments extends React.Component {
         );
 
         const {comments} = this.state;
+        const count = comments.length ? comments.length : 0;
         const commentsList = comments.length ?
             <List
                 size="small"
                 dataSource={comments}
-                // itemLayout="vertical "
                 pagination={{
                     onChange: (page) => {
                         console.log(page);
                     },
                     pageSize: 10,
+                    total: count
                 }}
                 renderItem={item => (
                     <List.Item
@@ -112,7 +113,8 @@ class Comments extends React.Component {
                             </FormItem>
                             <FormItem wrapperCol={{span: 24}}>
                                 <Button type="primary" htmlType="submit">提交评论</Button>
-                                <Button type="primary" style={{float:"right"}} htmlType="button" onClick={this.addUserCollection.bind(this)}>收藏文章</Button>
+                                <Button type="primary" style={{float: "right"}} htmlType="button"
+                                        onClick={this.addUserCollection.bind(this)}>收藏文章</Button>
                             </FormItem>
                         </Form>
                     </Col>
